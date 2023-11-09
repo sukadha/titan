@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Titanic Survival Predictor</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-node"></script>
+</head>
+<body>
+    <h2>Titanic Survival Predictor</h2>
+
+    <label for="pclass">Passenger Class: </label>
+    <input type="number" id="pclass" min="1" max="3" step="1" value="1"><br><br>
+
+    <label for="sex">Sex (0 for male, 1 for female): </label>
+    <input type="number" id="sex" min="0" max="1" step="1" value="1"><br><br>
+
+    <label for="age">Age: </label>
+    <input type="number" id="age" value="25"><br><br>
+
+    <label for="fare">Fare: </label>
+    <input type="number" id="fare" value="50"><br><br>
+
+    <button onclick="predictSurvival()">Predict Survival</button>
+
+    <p id="result"></p>
+
+    <script>
+        async function predictSurvival() {
+            const passengerClass = document.getElementById('pclass').value;
+            const sex = document.getElementById('sex').value;
+            const age = document.getElementById('age').value;
+            const fare = document.getElementById('fare').value;
+
+            const model = await tf.loadLayersModel('path_to_your_model/model.json'); // Replace with the actual path to your model
+
+            const input = tf.tensor2d([[passengerClass, sex, age, fare]], [1, 4]);
+            const prediction = model.predict(input);
+            const result = prediction.dataSync()[0] > 0.5 ? 'Survived' : 'Did not survive';
+
+            document.getElementById('result').innerText = `Prediction: ${result}`;
+        }
+    </script>
+</body>
+</html>
